@@ -1,0 +1,184 @@
+%\documentclass{article}
+\documentclass[tikz, border=10pt]{standalone}
+%\usepackage[utf8]{inputenc}
+%\usepackage[landscape]{geometry}  %% For landscape mode
+
+%##### Dependencies for 
+\usepackage{xcolor}
+\usepackage{tikz}
+%\usepackage[outline]{contour}
+\usetikzlibrary{shapes.geometric, arrows, positioning, backgrounds, calc}
+\usepackage{amssymb}
+%##### Dependencies for flowchart
+
+%#### Reduce space between lines in list
+\usepackage{enumitem}
+\setlist{nolistsep}
+%#### Reduce space between lines in list
+
+
+%#### Define Tikz block types
+\definecolor{cyan}{cmyk}{1,0,0,0}
+\definecolor{skyblue}{cmyk}{0.45,0,0.06,0.06}
+\definecolor{purp}{cmyk}{1,1,0,0.12}
+\definecolor{warmpurp}{cmyk}{.58,1,0,0}
+\definecolor{oran}{cmyk}{0,.78,1,0}
+\definecolor{grn}{cmyk}{1,0.15,.40,0} % greeh
+\definecolor{brightgrn}{cmyk}{.36,0,1,0}
+\definecolor{greygreen}{cmyk}{.52,0.28,.33,.6}
+\definecolor{yell}{cmyk}{0,.18,1,0}
+\definecolor{rd}{cmyk}{0,.94,1,0}   % red
+
+\begin{document}
+
+\tikzstyle{start} = [circle, minimum width=1.5cm, minimum height=1cm,text centered, draw=grn, fill=grn!5, line width=1mm, text width = 1.5cm]
+\tikzstyle{start_disc} = [start, draw=warmpurp, fill=warmpurp!5]
+\tikzstyle{decision} = [rectangle, minimum height=.5cm, fill=white, text centered, draw=oran, line width=.2mm,  text width = 2cm]
+\tikzstyle{box} = [rectangle, text centered, draw=greygreen!60, dashed, line width=.5mm,  text width = 2cm]
+\tikzstyle{algorithms} = [rectangle, minimum width=2cm, minimum height=3cm, draw=cyan!80, line width=0.6mm, fill=cyan!10,  text width = 3cm, font=\sffamily]
+
+\tikzstyle{arrow} = [draw, -latex', thick, rounded corners=5pt]
+
+\begin{tikzpicture}[node distance=4cm]
+        \node (start)   [start] {F(x)\\ $x\in \mathbb{R}$};
+            
+        \node (dec1)    [decision, below left =0.5cm and 4cm of start] {Constraints};
+        \node (dec2)    [decision, below = 2cm of start] {Convex?};
+        \node (dec3)    [decision, below right=0.5cm and 4cm of start] {Constraints};
+        \node (alg1)    [algorithms, below left=0.5cm and 1cm of dec1] 
+            {   \begin{itemize}
+                    \item Simplex\\
+                    \item Interior Point$^l$
+                \end{itemize}};
+        \node (alg2)    [algorithms, below right=0.5cm and 1cm of dec3] 
+            {   \begin{itemize}
+                    \item Modified Simplex\\
+                    \item Interior Point$^l$
+                \end{itemize}};
+        \node (alg11)    [algorithms, right = 7cm of alg2.north, anchor=north, text width = 4cm, minimum width = 4cm]  {
+                \begin{itemize}
+                    \item MI(N)LP
+                    \item Dynamic Programming
+                    \item CLP
+                    \item Heuristic search
+                    \begin{itemize}
+                        \item Random Search
+                        \item Simulated Annealing
+                        \item Tabu Search
+                        \item Genetic algorithms
+                        \item Artificial neural networks
+                    \end{itemize}
+                \end{itemize}
+            };
+        \node (start_disc)   [start_disc] at(start-|alg11){F(x)\\ $x_i\in              \mathbb{R}$, $x_j \in \mathbb{Z}$};
+        \node (dec4)    [decision, below left= 1cm and 2cm of dec2] {Convex\\ Constraints?};
+        \node (dec5)[decision, below right =2cm and 1cm of dec2]{Constraints};
+        \node (dec6)[decision, below left = 1cm and .5cm of dec5]{Linear?};
+        \node (dec7)[decision, below right= 1cm and .5cm of dec5]{Linear?};
+        \node (alg5)    [algorithms, below = 1cm of dec6]
+            {  \begin{itemize}
+                    \item Lagrange Multiplier
+                \end{itemize}};
+        \node (alg3)    [algorithms] at (dec4|- alg5)
+            {   \begin{itemize}
+                    \item Cutting Plane\\
+                    \item Ellipsoid\\
+                    \item Interior Point
+                \end{itemize}};
+        \node (alg6)    [algorithms, below left = 1cm and -1cm of dec7] 
+            {   \begin{itemize}
+                    \item Gradient Projection methods\\
+                    \item SQP
+                \end{itemize}};
+        \node (alg7)    [algorithms, below right = 1cm and -1cm of dec7] 
+            {   \begin{itemize}
+                    \item Penalty Function\\
+                    \item Barrier Function\\
+                    \item SQP
+                \end{itemize}};
+        \node (dec9) [decision, below right=1cm and 0cm of alg7] {Multi-start\\Local Optimization};
+        \node (dec8) [decision, below left =0cm and 5cm of dec9] {Analytic derivatives};
+        \node (alg8)    [algorithms, below left =1cm and 1.5cm of dec8] 
+            {   \begin{itemize}
+                    \item Levenberg-Marquardt\\
+                    \item Newton\\
+                    \item Newton Line Search
+                \end{itemize}};
+        \node (alg9)    [algorithms, below =1cm of dec8] 
+            {   \begin{itemize}
+                    \item Quasi-Newton\\
+                    \item Quasi-Newton Line Search
+                    \item Steepest Descent Line Search
+                \end{itemize}};
+        \node (alg10)    [algorithms, below right =1cm and 1.5cm of dec8] 
+            {   \begin{itemize}
+                    \item Powell's Perpendicular Line Search\\
+                    \item  Nelder-Mead$^s$
+                    \end{itemize}};
+        \node (alg12)    [algorithms, right =3cm of alg10] 
+            {   \begin{itemize}
+                    \item Random Search\\
+                    \item Simulated Annealing\\
+                    \item Genetic Algorithms
+                    \end{itemize}};
+
+        
+        \draw [arrow] (start) -| node[fill=white, right= 2cm] {Linear} (dec1);
+        \draw [arrow] (start) -| node[fill=white, left = 2cm] {Quadratic} (dec3);
+        \draw [arrow] (start_disc) -- (alg11);
+        
+        \draw [arrow] (dec1) -| node[fill=white, right = 1cm] {None} (alg1);
+        \draw [arrow] (dec1) |- node[fill=white, above = 0.5cm] {Linear} (alg1);
+        \draw [arrow] (dec1) -| node {} (dec2);
+        \draw [arrow] (dec3) -| node {} (dec2);
+        \draw [arrow] (start) -- node[fill=white, below=0cm] {Non-Linear} (dec2);
+        \draw [arrow] (dec3) -| node[fill=white,left=.5cm] {Linear} (alg2);
+        
+        
+        \draw [arrow] (dec4) -- node[fill=white] {Yes} (alg3);
+                
+        
+        \node (dec15) [label] at(dec4 -| dec2) {No};
+        \node (dec16) [label, below left = 0.1cm and -0.5cm of dec2] {Yes};
+        \node (dec17) [label, below right = 0.1cm and -0.5cm of dec2] {No};
+        \draw [arrow] (dec2) |- (dec16) -| (dec4);
+        \draw [arrow] (dec2) |- (dec17) -| (dec5);
+        \draw [arrow] (dec4) -- (dec15) -| (dec5);
+        
+        \node (dec18) [label, below left = 0.1cm and -0.5cm of dec5] {h(x)};
+        \node (dec19) [label, below right = 0.1cm and -0.5cm of dec5] {g(x)};
+        \draw [arrow] (dec5) |- (dec18) -| (dec6);
+        \draw [arrow] (dec5) |- (dec19) -| (dec7);
+    
+        \node (dec21) [label, below = 0.1cm of dec6] {No*};
+        \draw [arrow] (dec6) -- (dec21) -- (alg5);
+        
+        \node (dec22) [label, below left = 0.1cm and -0.5cm of dec7] {Yes};
+        \node (dec23) [label, below right = 0.1cm and -0.5cm of dec7] {No};
+        \draw [arrow] (dec7) |- (dec22) -| (alg6);
+        \draw [arrow] (dec7) |- (dec23) -| (alg7);
+                
+        \draw [arrow] (dec5) -| node[fill=white, left = 2cm] {None/Eliminable} (dec9);
+        
+        \draw [arrow] (dec8) -| node[fill=white, right = 0.4cm] {$H,\triangledown f$} (alg8);
+        \draw [arrow] (dec8) -- node[fill=white, below = -0.3cm] {$\triangledown f$} (alg9);
+        \draw [arrow] (dec8) -| node[fill=white, left = 1cm] {None} (alg10);
+        
+        \draw [arrow] (alg5) |- ++(0,-2) -| (dec9);
+            
+        \node (dec33) [label,left =2cm of dec9] {Yes};
+        \node (dec34) [label,right=.6cm of dec9] {No};
+        \draw[arrow] (dec9) -- (dec33) -| (dec8);
+        \draw[arrow] (dec9) -- (dec34) -| (alg12);
+        
+
+        
+        \node (dec100) [draw=greygreen!60, anchor = south west, text width = 6cm, font=\sffamily] at(alg1.west|-alg8.south){
+            $^s$ : only for small-sized problems\\
+            $^l$ : only for large-sized problems\\
+            $^*$ : linear equality constraints are generally eliminable};
+        
+        %\node (dec101) [draw=greygreen!60, right = 1cm of dec100] {By X.G.Gerrmann};
+\end{tikzpicture}
+
+\end{document}
