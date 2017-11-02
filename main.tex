@@ -14,6 +14,7 @@
 %#### Reduce space between lines in list
 \usepackage{enumitem}
 \setlist{nolistsep}
+\setlist{leftmargin=2em, itemsep = 0.1em, topsep=0pt }
 %#### Reduce space between lines in list
 
 
@@ -23,7 +24,7 @@
 \definecolor{purp}{cmyk}{1,1,0,0.12}
 \definecolor{warmpurp}{cmyk}{.58,1,0,0}
 \definecolor{oran}{cmyk}{0,.78,1,0}
-\definecolor{grn}{cmyk}{1,0.15,.40,0} % greeh
+\definecolor{grn}{cmyk}{1,0.15,.40,0} % n
 \definecolor{brightgrn}{cmyk}{.36,0,1,0}
 \definecolor{greygreen}{cmyk}{.52,0.28,.33,.6}
 \definecolor{yell}{cmyk}{0,.18,1,0}
@@ -34,22 +35,23 @@
 \tikzstyle{start} = [circle, minimum width=1.5cm, minimum height=1cm,text centered, draw=grn, fill=grn!5, line width=1mm, text width = 1.5cm]
 \tikzstyle{start_disc} = [start, draw=warmpurp, fill=warmpurp!5]
 \tikzstyle{decision} = [rectangle, minimum height=.5cm, fill=white, text centered, draw=oran, line width=.2mm,  text width = 2cm]
-\tikzstyle{box} = [rectangle, text centered, draw=greygreen!60, dashed, line width=.5mm,  text width = 2cm]
 \tikzstyle{algorithms} = [rectangle, minimum width=2cm, minimum height=3cm, draw=cyan!80, line width=0.6mm, fill=cyan!10,  text width = 3cm, font=\sffamily]
 
 \tikzstyle{arrow} = [draw, -latex', thick, rounded corners=5pt]
 
 \begin{tikzpicture}[node distance=4cm]
         \node (start)   [start] {F(x)\\ $x\in \mathbb{R}$};
-            
-        \node (dec1)    [decision, below left =0.5cm and 4cm of start] {Constraints};
+        
+        \node (dec1)    [decision, below left =0.5cm and 4cm of start]
+        {Constraints};
         \node (dec2)    [decision, below = 2cm of start] {Convex?};
         \node (dec3)    [decision, below right=0.5cm and 4cm of start] {Constraints};
-        \node (alg1)    [algorithms, below left=0.5cm and 1cm of dec1] 
-            {   \begin{itemize}
-                    \item Simplex\\
-                    \item Interior Point$^l$
-                \end{itemize}};
+        \node (alg1)    [algorithms, below left=0.5cm and 1cm of dec1] {
+            \begin{itemize}
+                \item Simplex\\
+                \item Interior Point$^l$
+            \end{itemize}
+        };
         \node (alg2)    [algorithms, below right=0.5cm and 1cm of dec3] 
             {   \begin{itemize}
                     \item Modified Simplex\\
@@ -77,38 +79,40 @@
         \node (dec7)[decision, below right= 1cm and .5cm of dec5]{Linear?};
         \node (alg5)    [algorithms, below = 1cm of dec6]
             {  \begin{itemize}
-                    \item Lagrange Multiplier
-                \end{itemize}};
+                    \item Lagrangian Multiplier
+                \end{itemize}
+            };
         \node (alg3)    [algorithms] at (dec4|- alg5)
-            {   \begin{itemize}
-                    \item Cutting Plane\\
-                    \item Ellipsoid\\
-                    \item Interior Point
-                \end{itemize}};
+            {
+            \begin{itemize}
+                \item Cutting Plane\\
+                \item Ellipsoid\\
+                \item Interior Point
+            \end{itemize}
+        };
         \node (alg6)    [algorithms, below left = 1cm and -1cm of dec7] 
             {   \begin{itemize}
-                    \item Gradient Projection methods\\
+                    \item Gradient Projection + direction determination line search\\
                     \item SQP
                 \end{itemize}};
         \node (alg7)    [algorithms, below right = 1cm and -1cm of dec7] 
             {   \begin{itemize}
+                    \item SQP\\
                     \item Penalty Function\\
-                    \item Barrier Function\\
-                    \item SQP
+                    \item Barrier Function
                 \end{itemize}};
-        \node (dec9) [decision, below right=1cm and 0cm of alg7] {Multi-start\\Local Optimization};
-        \node (dec8) [decision, below left =0cm and 5cm of dec9] {Analytic derivatives};
+        \node (dec9) [decision, below right=1cm and 0cm of alg7] {Multi-start\\local optimization};
+        \node (dec8) [decision, below left =0cm and 5cm of dec9] {Analytic/ numerical derivatives};
         \node (alg8)    [algorithms, below left =1cm and 1.5cm of dec8] 
             {   \begin{itemize}
-                    \item Levenberg-Marquardt\\
-                    \item Newton\\
-                    \item Newton Line Search
-                \end{itemize}};
+                    \item Levenberg-Marquardt$^{**}$\\
+                    \item Newton$^{**}$
+                \end{itemize}
+            };
         \node (alg9)    [algorithms, below =1cm of dec8] 
             {   \begin{itemize}
-                    \item Quasi-Newton\\
-                    \item Quasi-Newton Line Search
-                    \item Steepest Descent Line Search
+                    \item Quasi-Newton$^{**}$\\
+                    \item Steepest Descent$^{**}$
                 \end{itemize}};
         \node (alg10)    [algorithms, below right =1cm and 1.5cm of dec8] 
             {   \begin{itemize}
@@ -122,12 +126,13 @@
                     \item Genetic Algorithms
                     \end{itemize}};
 
+        \node (dec0) [decision] at(alg1|-dec1){No solution};    
         
-        \draw [arrow] (start) -| node[fill=white, right= 2cm] {Linear} (dec1);
+        \draw [arrow] (start) -| node[fill=white, right= 2cm] {Affine} (dec1);
         \draw [arrow] (start) -| node[fill=white, left = 2cm] {Quadratic} (dec3);
         \draw [arrow] (start_disc) -- (alg11);
         
-        \draw [arrow] (dec1) -| node[fill=white, right = 1cm] {None} (alg1);
+        \draw [arrow] (dec1) -- (dec0) node[midway, fill=white]{none};
         \draw [arrow] (dec1) |- node[fill=white, above = 0.5cm] {Linear} (alg1);
         \draw [arrow] (dec1) -| node {} (dec2);
         \draw [arrow] (dec3) -| node {} (dec2);
@@ -176,9 +181,10 @@
         \node (dec100) [draw=greygreen!60, anchor = south west, text width = 6cm, font=\sffamily] at(alg1.west|-alg8.south){
             $^s$ : only for small-sized problems\\
             $^l$ : only for large-sized problems\\
-            $^*$ : linear equality constraints are generally eliminable};
+            $^*$ : linear equality constraints are generally eliminable\\
+            $^{**}$ : original, or line search variant};
         
-        %\node (dec101) [draw=greygreen!60, right = 1cm of dec100] {By X.G.Gerrmann};
+\node (dec101) [draw=greygreen!60, above = 13em of alg1.west, anchor = west] {https://github.com/xgerrmann/Optimization-Flowchart};
 \end{tikzpicture}
 
 \end{document}
